@@ -1,5 +1,6 @@
-async function getUserData(client, userId) {
-  await client.connect();
+const pool = require("./db")
+async function getUserData(userId) {
+  const client = await pool.connect();
 
   try {
     const userData = await client.query(`
@@ -63,6 +64,6 @@ async function getUserData(client, userId) {
       reports: userReports.rows
     };
   } finally {
-    await client.end();
+    client.release();
   }
 }
