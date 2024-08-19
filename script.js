@@ -1,3 +1,7 @@
+const express = require("express")
+const router = express.Router();
+
+
 const pool = require("./db")
 async function getUserData(userId) {
   const client = await pool.connect();
@@ -67,3 +71,8 @@ async function getUserData(userId) {
     client.release();
   }
 }
+
+router.get("/", (req,res) =>{
+
+
+})
