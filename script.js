@@ -1,71 +1,68 @@
-async function getUserData(userId) {
-  const userDataQuery = `
-    SELECT apple_id, name, profile_image_url, favorite_book, created_at, updated_at
-    FROM users
-    WHERE id = $1;
-  `;
+async function getUserData(client, userId) {
+  await client.connect();
 
-  const userBooksQuery = `
-    SELECT books.title AS book_title, genres.name AS genre_name, userbooks.status, userbooks.comment, userbooks.created_at, userbooks.updated_at
-    FROM userbooks
-    JOIN books ON userbooks.book_id = books.id
-    JOIN bookgenres ON books.id = bookgenres.book_id
-    JOIN genres ON bookgenres.genre_id = genres.id
-    WHERE userbooks.user_id = $1;
-  `;
+  try {
+    const userData = await client.query(`
+      SELECT apple_id, name, profile_image_url, favorite_book, created_at, updated_at
+      FROM users
+      WHERE id = $1;
+    `, [userId]);
 
-  const userGenresQuery = `
-    SELECT genres.name AS genre_name
-    FROM usergenres
-    JOIN genres ON usergenres.genre_id = genres.id
-    WHERE usergenres.user_id = $1;
-  `;
+    const userBooks = await client.query(`
+      SELECT books.title AS book_title, genres.name AS genre_name, userbooks.status, userbooks.comment, userbooks.created_at, userbooks.updated_at
+      FROM userbooks
+      JOIN books ON userbooks.book_id = books.id
+      JOIN bookgenres ON books.id = bookgenres.book_id
+      JOIN genres ON bookgenres.genre_id = genres.id
+      WHERE userbooks.user_id = $1;
+    `, [userId]);
 
-  const quotesQuery = `
-    SELECT books.title AS book_title, quotes.content, quotes.page_number, quotes.created_at, quotes.said_by
-    FROM quotes
-    JOIN books ON quotes.book_id = books.id
-    WHERE quotes.user_id = $1;
-  `;
+    const userGenres = await client.query(`
+      SELECT genres.name AS genre_name
+      FROM usergenres
+      JOIN genres ON usergenres.genre_id = genres.id
+      WHERE usergenres.user_id = $1;
+    `, [userId]);
 
-  const followsQuery = `
-    SELECT f1.name AS follower_name, f2.name AS followed_name, follows.created_at
-    FROM follows
-    LEFT JOIN users f1 ON follows.follower_id = f1.id
-    LEFT JOIN users f2 ON follows.followed_id = f2.id
-    WHERE follows.follower_id = $1 OR follows.followed_id = $1;
-  `;
+    const userQuotes = await client.query(`
+      SELECT books.title AS book_title, quotes.content, quotes.page_number, quotes.created_at, quotes.said_by
+      FROM quotes
+      JOIN books ON quotes.book_id = books.id
+      WHERE quotes.user_id = $1;
+    `, [userId]);
 
-  const quoteLikesQuery = `
-    SELECT quotes.content AS quote_content, books.title AS book_title
-    FROM quotelikes
-    JOIN quotes ON quotelikes.quote_id = quotes.id
-    JOIN books ON quotes.book_id = books.id
-    WHERE quotelikes.user_id = $1;
-  `;
+    const userFollows = await client.query(`
+      SELECT f1.name AS follower_name, f2.name AS followed_name, follows.created_at
+      FROM follows
+      LEFT JOIN users f1 ON follows.follower_id = f1.id
+      LEFT JOIN users f2 ON follows.followed_id = f2.id
+      WHERE follows.follower_id = $1 OR follows.followed_id = $1;
+    `, [userId]);
 
-  const reportsQuery = `
-    SELECT reports.content_type, reports.content_id, reports.reason, reports.created_at
-    FROM reports
-    WHERE reports.reporter_id = $1;
-  `;
+    const userQuoteLikes = await client.query(`
+      SELECT quotes.content AS quote_content, books.title AS book_title
+      FROM quotelikes
+      JOIN quotes ON quotelikes.quote_id = quotes.id
+      JOIN books ON quotes.book_id = books.id
+      WHERE quotelikes.user_id = $1;
+    `, [userId]);
 
+    const userReports = await client.query(`
+      SELECT reports.content_type, reports.content_id, reports.reason, reports.created_at
+      FROM reports
+      WHERE reports.reporter_id = $1;
+    `, [userId]);
 
-  const userData = await pool.query(userDataQuery, [userId]);
-  const userBooks = await pool.query(userBooksQuery, [userId]);
-  const userGenres = await pool.query(userGenresQuery, [userId]);
-  const userQuotes = await pool.query(quotesQuery, [userId]);
-  const userFollows = await pool.query(followsQuery, [userId]);
-  const userQuoteLikes = await pool.query(quoteLikesQuery, [userId]);
-  const userReports = await pool.query(reportsQuery, [userId]);
-
-  return {
-    user: userData.rows[0],
-    books: userBooks.rows,
-    genres: userGenres.rows,
-    quotes: userQuotes.rows,
-    follows: userFollows.rows,
-    quoteLikes: userQuoteLikes.rows,
-    reports: userReports.rows
-  };
+    return {
+      user: userData.rows[0],
+      books: userBooks.rows,
+      genres: userGenres.rows,
+      quotes: userQuotes.rows,
+      follows: userFollows.rows,
+      quoteLikes: userQuoteLikes.rows,
+      reports: userReports.rows
+    };
+  } finally {
+    await client.end();
+  }
 }
