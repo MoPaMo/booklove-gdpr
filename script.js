@@ -15,6 +15,14 @@ let template;
   }
 })();
 
+async function getId(download_key) {
+    const result = await pool.query(
+        'SELECT id FROM user_data_download_links WHERE download_key = $1',
+        [download_key]
+    );
+    return result.rows.length > 0 ? result.rows[0].id : null;
+}
+
 async function getUserData(userId) {
   const client = await pool.connect();
   try {
@@ -92,8 +100,16 @@ function checkKey(req, res, next) {
 }
 
 router.get("/view/", checkKey, async (req, res) => {
+if(!req.query.key){
+    return res.status(401).json({ message: 'Unauthorized' });
+}
+else{
+const id = await getId(req.query.key)
+}
+if(!id){
+res.status(401).json({ message: 'Unauthorized' });}
   try {
-    const data = await getUserData(req.query.key);
+    const data = await getUserData(id);
     const text = Mustache.render(template, data);
     res.send(text);
   } catch (err) {
@@ -103,6 +119,14 @@ router.get("/view/", checkKey, async (req, res) => {
 });
 
 router.get("/data.json", checkKey, async (req, res) => {
+if(!req.query.key){
+    return res.status(401).json({ message: 'Unauthorized' });
+}
+else{
+const id = await getId(req.query.key)
+}
+if(!id){
+res.status(401).json({ message: 'Unauthorized' });}
   try {
     const data = await getUserData(req.query.key);
     res.json(data);
