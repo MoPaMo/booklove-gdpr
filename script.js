@@ -1,8 +1,12 @@
       const express = require("express")
       const router = express.Router();
 
+const fs = require('fs').promises;
+const Mustache = require('mustache');
 
       const pool = require("./db")
+      const template = await fs.readFile('index.html', 'utf-8');
+
       async function getUserData(userId) {
         const client = await pool.connect();
 
@@ -72,7 +76,25 @@
         }
       }
 
-      router.get("/", (req,res) =>{
+      router.get("/view/", async (req,res) =>{
+      if(!req.query.key){
+      res.send("Unauthorized")
+      return;
+      }
+      const data = await getUserData(req.query.key)
 
 
+const text = Mustache.render(template, userData);
+res.send(text)
+      })
+      router.get("/data.json", async (req, res) => {
+      if(!req.query.key){
+      res.send("Unauthorized")
+      return;
+      }
+      const data = await getUserData(req.query.key)
+
+
+res.json(data)
+      
       })
