@@ -3,6 +3,8 @@ const router = express.Router();
 const fs = require('fs').promises;
 const Mustache = require('mustache');
 const pool = require("./db");
+const { v4: uuidv4 } = require('uuid');
+const authenticateToken = require('../middleware/authenticateToken');
 
 let template;
 (async () => {
@@ -109,5 +111,24 @@ router.get("/data.json", checkKey, async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+
+router.post('/get-code', authenticateToken, async (req, res) => {
+    const user_id = req.user.userId;
+    const expiresAt = new Date(Date.now() + 30 * 60 * 1000);
+    const download_key = uuidv4(); 
+    try {
+        const result = await pool.query(
+            `INSERT INTO user_data_download_links (user_id, download_key, expires_at)
+             VALUES ($1, $2, $3)`,
+            [user_id, download_key, expiresAt]
+        );
+        res.send(download_key)
+    } catch (error) {
+        console.error('Error creating download link:', error);
+        res.status(500).send('Internal Server Error' );
+    }
+});
+
 
 module.exports = router;
