@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Data on Booklove</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+</head>
+<body>
+  <section class="section">
+    <div class="container">
+      <h1 class="title">Your Data on Booklove</h1>
+      <div class="subtitle">This data is collected and stored by Booklove to provide our service to you.</div>
+
+      <div class="box">
+        <h5 class="title is-5">Your Profile Information</h5>
+        <div><strong>Apple ID String:</strong> {{user.apple_id}}</div>
+        <div class="has-text-grey">
+          <small>
+            This identifier is passed to us by Apple when you Sign In With Apple. It is unique to our app and we cannot identify you or your Apple ID based on it. Please don't share it.
+          </small>
+        </div>
+        <div><strong>Name:</strong> {{user.name}}</div>
+        <div><strong>Favorite Book:</strong> {{user.favorite_book}}</div>
+        <div><strong>Profile Image:</strong> <img src="{{user.profile_image_url}}" alt="Profile Image" class="image is-128x128"></div>
+        <div><strong>Created At:</strong> {{user.created_at}}</div>
+        <div><strong>Updated At:</strong> {{user.updated_at}}</div>
+      </div>
+
+      <h2 class="title is-4">Saved Books</h2>
+      <div class="mb-4">
+        {{#books}}
+        <div class="box">
+          <h5 class="title is-5">{{book_title}}</h5>
+          <div><strong>Status:</strong> {{status}}</div>
+          <div><strong>Comment:</strong> {{comment}}</div>
+          <div><strong>Created At:</strong> {{created_at}}</div>
+          <div><strong>Last Updated At:</strong> {{updated_at}}</div>
+        </div>
+        {{/books}}
+      </div>
+
+      <h2 class="title is-4">Genres you follow</h2>
+      <div class="content">
+        <ul>
+          {{#genres}}
+          <li>{{genre_name}}</li>
+          {{/genres}}
+        </ul>
+      </div>
+
+      <h2 class="title is-4">Quotes created by you</h2>
+      <div class="mb-4">
+        {{#quotes}}
+        <div class="box">
+          <h5 class="title is-5">{{book_title}}</h5>
+          <div><strong>Quote:</strong> {{content}}</div>
+          <div><strong>Page Number:</strong> {{page_number}}</div>
+          <div><strong>Said By:</strong> {{said_by}}</div>
+          <div><strong>Created At:</strong> {{created_at}}</div>
+        </div>
+        {{/quotes}}
+      </div>
+
+      <h2 class="title is-4">Follows</h2>
+      <div class="mb-4">
+        {{#follows}}
+        <div class="box">
+          <div><strong>Follower:</strong> {{follower_name}}</div>
+          <div><strong>Following:</strong> {{followed_name}}</div>
+          <div><strong>Followed At:</strong> {{created_at}}</div>
+        </div>
+        {{/follows}}
+      </div>
+
+      <h2 class="title is-4">Liked Quotes</h2>
+      <div class="mb-4">
+        {{#quoteLikes}}
+        <div class="box">
+          <div><strong>Quote:</strong> {{quote_content}}</div>
+          <div><strong>Book Title:</strong> {{book_title}}</div>
+        </div>
+        {{/quoteLikes}}
+      </div>
+
+      <h2 class="title is-4">Reports</h2>
+      <div class="mb-4">
+        {{#reports}}
+        <div class="box">
+          <div><strong>Content Type:</strong> {{content_type}}</div>
+          <div><strong>Content ID:</strong> {{content_id}}</div>
+          <div><strong>Reason:</strong> {{reason}}</div>
+          <div><strong>Reported At:</strong> {{created_at}}</div>
+        </div>
+        {{/reports}}
+      </div>
+    </div>
+  </section>
+</body>
+</html>​​​​​​​​​​​​​​​​
