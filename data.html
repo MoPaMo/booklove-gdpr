@@ -5,18 +5,66 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Your Data on Booklove</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <style>
+  @media print {
+.is-hidden-print {
+display: none !important;
+}
+}
+</style>
 </head>
 <body>
+
+  <nav class="navbar is-light is-hidden-print" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://getbooklove.app">
+        <img src="https://getbooklove.app/logo.png" alt="Booklove Logo">
+      </a>
+
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasic">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+
+    <div id="navbarBasic" class="navbar-menu">
+      <div class="navbar-start">
+        <a class="navbar-item" href="#profile-info">
+          Profile Information
+        </a>
+        <a class="navbar-item" href="#saved-books">
+          Saved Books
+        </a>
+        <a class="navbar-item" href="#followed-genres">
+          Followed Genres
+        </a>
+        <a class="navbar-item" href="#created-quotes">
+          Created Quotes
+        </a>
+        <a class="navbar-item" href="#follows">
+          Follows
+        </a>
+        <a class="navbar-item" href="#liked-quotes">
+          Liked Quotes
+        </a>
+        <a class="navbar-item" href="#reports">
+          Reports
+        </a>
+      </div>
+    </div>
+  </nav>
+
   <section class="section">
     <div class="container">
       <h1 class="title">Your Data on Booklove</h1>
       <div class="subtitle">This data is collected and stored by Booklove to provide our service to you.</div>
 
-<div class="notification is-warning">
+      <div class="is-hidden-print notification is-warning">
+        Please only share your data and this page with people you trust. The link to this page will work for up to 30 minutes after first activation. <a href="#" class="save"> Save this page </a> to access your data afterwards or generate a new link from the booklove app.
+      </div>
 
-Please only share your data and this page with people you trust. The link to this page will work for up to 30 minutes after first activation.
-</div>
-      <div class="box">
+      <div id="profile-info" class="box">
         <h5 class="title is-5">Your Profile Information</h5>
         <div><strong>Apple ID String:</strong> {{user.apple_id}}</div>
         <div class="has-text-grey">
@@ -31,7 +79,7 @@ Please only share your data and this page with people you trust. The link to thi
         <div><strong>Updated At:</strong> {{user.updated_at}}</div>
       </div>
 
-      <h2 class="title is-4">Saved Books</h2>
+      <h2 id="saved-books" class="title is-4">Saved Books</h2>
       <div class="mb-4">
         {{#books}}
         <div class="box">
@@ -44,7 +92,7 @@ Please only share your data and this page with people you trust. The link to thi
         {{/books}}
       </div>
 
-      <h2 class="title is-4">Genres you follow</h2>
+      <h2 id="followed-genres" class="title is-4">Genres you follow</h2>
       <div class="content">
         <ul>
           {{#genres}}
@@ -53,7 +101,7 @@ Please only share your data and this page with people you trust. The link to thi
         </ul>
       </div>
 
-      <h2 class="title is-4">Quotes created by you</h2>
+      <h2 id="created-quotes" class="title is-4">Quotes created by you</h2>
       <div class="mb-4">
         {{#quotes}}
         <div class="box">
@@ -66,7 +114,7 @@ Please only share your data and this page with people you trust. The link to thi
         {{/quotes}}
       </div>
 
-      <h2 class="title is-4">Follows</h2>
+      <h2 id="follows" class="title is-4">Follows</h2>
       <div class="mb-4">
         {{#follows}}
         <div class="box">
@@ -77,7 +125,7 @@ Please only share your data and this page with people you trust. The link to thi
         {{/follows}}
       </div>
 
-      <h2 class="title is-4">Liked Quotes</h2>
+      <h2 id="liked-quotes" class="title is-4">Liked Quotes</h2>
       <div class="mb-4">
         {{#quoteLikes}}
         <div class="box">
@@ -87,7 +135,7 @@ Please only share your data and this page with people you trust. The link to thi
         {{/quoteLikes}}
       </div>
 
-      <h2 class="title is-4">Reports</h2>
+      <h2 id="reports" class="title is-4">Reports</h2>
       <div class="mb-4">
         {{#reports}}
         <div class="box">
@@ -100,26 +148,48 @@ Please only share your data and this page with people you trust. The link to thi
       </div>
     </div>
   </section>
+  
   <footer class="footer">
-  <div class="content has-text-centered">
-<p>Copyright (c) booklove <script>document.write(new Date().getFullYear());</script>
+    <div class="content has-text-centered">
+      <p>Copyright (c) booklove <script>document.write(new Date().getFullYear());</script>
 
-<noscript>
-  <p>2024-current
-</noscript>
-
-</p>
-<p>
-View 
-      <a href="https://getbooklove.app/tos">Terms of Service</a> and
-      <a href="https://getbooklove.app/privacy">Privacy Policy</a>.
-    </p>
-    <p>
-      <a href="https://bulma.io">Bulma</a> by Jeremy Thomas, licensed
-      <a href="https://opensource.org/licenses/MIT">MIT</a>.
+      <noscript>
+        <p>2024-current</p>
+      </noscript>
       </p>
-      
-  </div>
-</footer>
+      <p>
+        View 
+        <a href="https://getbooklove.app/tos">Terms of Service</a> and
+        <a href="https://getbooklove.app/privacy">Privacy Policy</a>.
+      </p>
+      <p>
+        <a href="https://bulma.io">Bulma</a> by Jeremy Thomas, licensed
+        <a href="https://opensource.org/licenses/MIT">MIT</a>.
+      </p>
+    </div>
+  </footer>
+  
+  <script>
+  document.querySelectorAll('.save').forEach(button => {
+      button.onclick = (e) => {
+          window.print();
+      };
+  });
+  
+  document.addEventListener('DOMContentLoaded', () => {
+      const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+      if ($navbarBurgers.length > 0) {
+          $navbarBurgers.forEach(el => {
+              el.addEventListener('click', () => {
+                  const target = el.dataset.target;
+                  const $target = document.getElementById(target);
+                  el.classList.toggle('is-active');
+                  $target.classList.toggle('is-active');
+              });
+          });
+      }
+  });
+  </script>
 </body>
-</html>​​​​​​​​​​​​​​​​
+</html>
